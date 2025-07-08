@@ -12,6 +12,11 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+
+app.get('/', (req, res) => {
+  res.send('Hello World! Welcome!');
+});
+
 const contactsRoute = require('./routes/contacts');
 app.use('/contacts', contactsRoute);
 
