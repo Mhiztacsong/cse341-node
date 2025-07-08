@@ -3,7 +3,7 @@ module.exports = {
   base64Image: "",
   nameLink: {
     firstName: "Nsisong",
-    url: "https://johndoe.dev"
+    url: "https://mhiztacsong.dev"
   },
   primaryDescription: "Full-Stack Developer",
   workDescription1: "I specialize in building robust web apps.",
@@ -11,7 +11,7 @@ module.exports = {
   linkTitleText: "Connect with me:",
   linkedInLink: {
     text: "LinkedIn",
-    link: "https://linkedin.com/in/johndoe"
+    link: "https://linkedin.com"
   },
   githubLink: {
     text: "GitHub",
