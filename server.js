@@ -4,19 +4,18 @@ const fs = require('fs');
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
-
 const app = express();
 const PORT = 8080;
 
-app.use(cors()); // Enable CORS for frontend JS
+// Middlewares
+app.use(cors());
 app.use(express.json());
 
-// Route to serve professional data
+// Routes
+const contactsRoute = require('./routes/contacts');
+app.use('/contacts', contactsRoute);
 
-// app.get('/professional', (req, res) => {
-//   res.json(professionalData);
-// });
-
+// Professional route for previous activity
 app.get('/professional', async (req, res) => {
   const client = new MongoClient(process.env.MONGO_URI);
 
@@ -24,17 +23,13 @@ app.get('/professional', async (req, res) => {
     await client.connect();
     const database = client.db('cse341');
     const collection = database.collection('professionals');
-
-    const professional = await collection.findOne({}); // get the first document
+    const professional = await collection.findOne({});
 
     if (!professional) {
-      return res.status(404).json({ message: "No professional data found" });
+      return res.status(404).json({ message: 'No professional data found' });
     }
 
-    // Load base64 image from file
     const base64Image = fs.readFileSync('./data/base64Image.txt', 'utf-8');
-
-    // Add it to the professional object
     professional.base64Image = base64Image;
 
     res.json(professional);
@@ -46,7 +41,7 @@ app.get('/professional', async (req, res) => {
   }
 });
 
-
+// Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
