@@ -1,4 +1,5 @@
 const { MongoClient, ObjectId } = require('mongodb');
+require('dotenv').config();
 
 const uri = process.env.MONGO_URI;
 
@@ -24,4 +25,53 @@ async function getContactById(id) {
   }
 }
 
-module.exports = { getAllContacts, getContactById };
+async function createContact(contactData) {
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const db = client.db('cse341');
+    const result = await db.collection('contacts').insertOne(contactData);
+    return { _id: result.insertedId, ...contactData };
+  } finally {
+    await client.close();
+  }
+}
+
+async function updateContact(id, updatedData) {
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const db = client.db('cse341');
+    const result = await db.collection('contacts').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updatedData }
+    );
+    return result.modifiedCount > 0
+      ? { _id: id, ...updatedData }
+      : null;
+  } finally {
+    await client.close();
+  }
+}
+
+async function deleteContact(id) {
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const db = client.db('cse341');
+    const result = await db.collection('contacts').deleteOne({ _id: new ObjectId(id) });
+    return result.deletedCount > 0
+      ? { message: `Contact ${id} deleted` }
+      : null;
+  } finally {
+    await client.close();
+  }
+}
+
+module.exports = {
+  getAllContacts,
+  getContactById,
+  createContact,
+  updateContact,
+  deleteContact
+};
