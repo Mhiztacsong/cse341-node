@@ -4,8 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "server.js",
-    "p2": "node project2/server.js"
+    "start": "node project2/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
