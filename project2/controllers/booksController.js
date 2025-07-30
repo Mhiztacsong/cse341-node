@@ -28,11 +28,10 @@ exports.getBookById = async (req, res) => {
 // CREATE a new book
 exports.createBook = async (req, res) => {
   try {
-    const { title, author } = req.body;
+    const { title, author, genre, year, pages, publisher, summary } = req.body;
     const db = await connectToDb();
-    const result = await db.collection('books').insertOne({ title, author });
-
-    res.status(201).json({ _id: result.insertedId, title, author });
+    const result = await db.collection('books').insertOne({ title, author, genre, year, pages, publisher, summary });
+    res.status(201).json({ _id: result.insertedId, title, author, genre, year, pages, publisher, summary });
   } catch (error) {
     res.status(500).json({ message: 'Error creating book', error: error.message });
   }
@@ -41,11 +40,11 @@ exports.createBook = async (req, res) => {
 // UPDATE a book by ID
 exports.updateBook = async (req, res) => {
   try {
-    const { title, author } = req.body;
+    const { title, author, genre, year, pages, publisher, summary } = req.body;
     const db = await connectToDb();
     const result = await db.collection('books').updateOne(
       { _id: new ObjectId(req.params.id) },
-      { $set: { title, author } }
+      { $set: { title, author, genre, year, pages, publisher, summary } }
     );
 
     if (result.matchedCount === 0) return res.status(404).json({ message: 'Book not found' });

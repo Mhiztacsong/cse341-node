@@ -1,20 +1,14 @@
 const { body, validationResult } = require('express-validator');
 
-const bookValidationRules = () => {
-  return [
-    body('title')
-      .isString().withMessage('Title must be a string')
-      .trim()
-      .notEmpty().withMessage('Title is required')
-      .isLength({ min: 5 }).withMessage('Title must be at least 5 characters long'),
-
-    body('author')
-      .isString().withMessage('Author must be a string')
-      .trim()
-      .notEmpty().withMessage('Author is required')
-      .isLength({ min: 3 }).withMessage('Author must be at least 3 characters long')
-  ];
-};
+const bookValidationRules = () => [
+  body('title').isString().notEmpty().withMessage('Title is required'),
+  body('author').isString().notEmpty().withMessage('Author is required'),
+  body('genre').isString().notEmpty().withMessage('Genre is required'),
+  body('year').isInt({ min: 0 }).withMessage('Year must be a valid number'),
+  body('pages').isInt({ min: 1 }).withMessage('Pages must be a positive integer'),
+  body('publisher').optional().isString().withMessage('Publisher must be a string'),
+  body('summary').optional().isString().withMessage('Summary must be a string')
+];
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);

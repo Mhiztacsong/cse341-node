@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const authorsController = require('../controllers/authorsController');
+const ensureAuthenticated = require('../middleware/authMiddleware');
 const { authorValidationRules, validate } = require('../validators/authorValidator');
 
 /**
@@ -84,7 +85,7 @@ router.get('/:id', authorsController.getAuthorById);
  *       422:
  *         description: Validation error.
  */
-router.post('/', authorValidationRules(), validate, authorsController.createAuthor);
+router.post('/', ensureAuthenticated, authorValidationRules(), validate, authorsController.createAuthor);
 
 /**
  * @swagger
@@ -116,7 +117,7 @@ router.post('/', authorValidationRules(), validate, authorsController.createAuth
  *       422:
  *         description: Validation error.
  */
-router.put('/:id', authorValidationRules(), validate, authorsController.updateAuthor);
+router.put('/:id', ensureAuthenticated, authorValidationRules(), validate, authorsController.updateAuthor);
 
 /**
  * @swagger
@@ -133,6 +134,6 @@ router.put('/:id', authorValidationRules(), validate, authorsController.updateAu
  *       200:
  *         description: Author deleted successfully.
  */
-router.delete('/:id', authorsController.deleteAuthor);
+router.delete('/:id', ensureAuthenticated, authorsController.deleteAuthor);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const booksController = require('../controllers/booksController');
+const ensureAuthenticated = require('../middleware/authMiddleware');
 const { bookValidationRules, validate } = require('../validators/bookValidator');
 
 /**
@@ -42,10 +43,26 @@ router.get('/:id', booksController.getBookById);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - title
+ *               - author
+ *               - genre
+ *               - year
+ *               - pages
  *             properties:
  *               title:
  *                 type: string
  *               author:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               year:
+ *                 type: integer
+ *               pages:
+ *                 type: integer
+ *               publisher:
+ *                 type: string
+ *               summary:
  *                 type: string
  *     responses:
  *       201:
@@ -53,7 +70,7 @@ router.get('/:id', booksController.getBookById);
  *       422:
  *         description: Validation error.
  */
-router.post('/', bookValidationRules(), validate, booksController.createBook);
+router.post('/', ensureAuthenticated, bookValidationRules(), validate, booksController.createBook);
 
 /**
  * @swagger
@@ -72,10 +89,26 @@ router.post('/', bookValidationRules(), validate, booksController.createBook);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - title
+ *               - author
+ *               - genre
+ *               - year
+ *               - pages
  *             properties:
  *               title:
  *                 type: string
  *               author:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               year:
+ *                 type: integer
+ *               pages:
+ *                 type: integer
+ *               publisher:
+ *                 type: string
+ *               summary:
  *                 type: string
  *     responses:
  *       200:
@@ -83,7 +116,7 @@ router.post('/', bookValidationRules(), validate, booksController.createBook);
  *       422:
  *         description: Validation error.
  */
-router.put('/:id', bookValidationRules(), validate, booksController.updateBook);
+router.put('/:id', ensureAuthenticated, bookValidationRules(), validate, booksController.updateBook);
 
 /**
  * @swagger
@@ -100,6 +133,6 @@ router.put('/:id', bookValidationRules(), validate, booksController.updateBook);
  *       200:
  *         description: Book deleted successfully.
  */
-router.delete('/:id', booksController.deleteBook);
+router.delete('/:id', ensureAuthenticated, booksController.deleteBook);
 
 module.exports = router;
